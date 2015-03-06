@@ -4,7 +4,7 @@
 	<div class="container">
 		<h1>Alta de Evento</h1>
 		<div class="row">
-			<form action="index.php/welcome/altaEvento" method="POST">
+			<form action="index.php/welcome/altaEvento" method="post">
 
 				<div class="form-group">
 					<label for="nom">Nombre:</label>
@@ -28,7 +28,7 @@
 
 				<div class="form-group">
 					<label for="costo">Costo:</label>
-					<input name"costo" type="text" class="form-control" placeholder="999.99">
+					<input name"costo" type="float" class="form-control" placeholder="999.99">
 				</div>
 
 				<div class="form-group">

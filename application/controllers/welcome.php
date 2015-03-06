@@ -19,7 +19,7 @@ class Welcome extends CI_Controller {
 	 */
 	function __construct(){
 		parent::__construct();
-		$this->load->model('m_congreso');
+		$this->load->model('m_evento');
 	}
 	public function index()
 	{
@@ -56,7 +56,8 @@ class Welcome extends CI_Controller {
 		$datos['lugar']=$this->input->post('lugar');
 		$datos['hora']=$this->input->post('hora');
 		$datos['costo']=$this->input->post('costo');
-		$this->m_congreso->agregaCongreso($datos);
+		$this->m_evento->agregarEvento($datos);
+		$this->evento();
 	}
 }
 
