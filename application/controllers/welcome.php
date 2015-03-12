@@ -19,7 +19,7 @@ class Welcome extends CI_Controller {
 	 */
 	function __construct(){
 		parent::__construct();
-		$this->load->model('m_evento');
+		$this->load->model('m_congreso');
 	}
 	public function index()
 	{
@@ -56,8 +56,37 @@ class Welcome extends CI_Controller {
 		$datos['lugar']=$this->input->post('lugar');
 		$datos['hora']=$this->input->post('hora');
 		$datos['costo']=$this->input->post('costo');
-		$this->m_evento->agregarEvento($datos);
-		$this->evento();
+		
+		$this->m_congreso->agregarEvento($datos);
+		$datos['mensaje']="Alta de Evento Exitosa";
+		$datos['ruta']="index.php/welcome/evento";
+		$this->load->view('mensaje',$datos);
+	}
+	public function altaPonente()
+	{
+		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
+		$this->form_validation->set_message('valid_email','El <b>%s</b> es invaildo');
+
+		$this->form_validation->set_rules('nom','Nombre','required');
+		$this->form_validation->set_rules('correo','E-Mail','required|valid_email');
+		// $this->form_validation->set_rules('tel','Telefono','required');
+		// $this->form_validation->set_rules('domi','Domicilio','required');
+
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('ponente');
+		}
+		else{
+
+			$datos['nombre']=$this->input->post('nom');
+			$datos['correo']=$this->input->post('correo');
+			$datos['telefono']=$this->input->post('tel');
+			$datos['domicilio']=$this->input->post('domi');
+			
+			$this->m_congreso->agregarPonente($datos);
+			$datos['mensaje']="Alta de Ponente Exitosa";
+			$datos['ruta']="index.php/welcome/ponente";
+			$this->load->view('mensaje',$datos);
+		}
 	}
 }
 

@@ -4,7 +4,10 @@ class M_congreso extends CI_Model {
 		parent::__construct();
 	}
 
-	function agregaCongreso($datos){
-		$this->db->insert('eventos',$datos);
+	function agregarEvento($datos){
+		$this->db->insert('evento',$datos);
+	}
+	function agregarPonente($datos){
+		$this->db->insert('ponente',$datos);
 	}
 }
