@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php/welcome/index">Congreso</a>
+      <a class="navbar-brand" href="index.php/welcome/index"><img src="*img/indice.png" alt="Congreso"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -20,7 +20,7 @@
         <li><a href="index.php/welcome/evento       ">Evento        </a></li>
         <li><a href="index.php/welcome/conferencia  ">Conferencias  </a></li>
         <li><a href="index.php/welcome/taller       ">Talleres      </a></li>
-        <li><a href="index.php/welcome/ponente      ">Ponentes      </a></li>
+        <li><a href="index.php/welcome/showPonente  ">Ponentes      </a></li>
         <li><a href="index.php/welcome/instructor   ">Instructor    </a></li>
         <li><a href="index.php/welcome/participante ">Participantes </a></li>
 

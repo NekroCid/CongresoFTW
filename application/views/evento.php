@@ -22,7 +22,7 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label for="fecha">Fecha:</label>
-						<input name="fecha" type="date" class="form-control" placeholder="AAAA/MM/DD">
+						<input name="fecha" type="date" class="form-control" placeholder="AAAA-MM-DD">
 					</div>
 				</div>
 			</div>
