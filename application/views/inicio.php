@@ -26,7 +26,7 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
     <div class="item active">
-      <img src="img/Chrysanthemum.jpg" alt="...">
+      <img src="img/faro.jpg" alt="...">
       <div class="carousel-caption">
       	<h3>Imagen1</h3>
       </div>

@@ -25,13 +25,12 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('inicio');
 	}
+
+//----------------------------------------Vistas para Agregar--------------------------------------------------------------------------------
+
 	public function evento()
 	{
 		$this->load->view('evento');
-	}
-	public function taller()
-	{
-		$this->load->view('taller');
 	}
 	public function participante()
 	{
@@ -45,15 +44,47 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('ponente');
 	}
+	function conferencia(){
+		$ponentes=$this->m_congreso->getPonentes();
+		$evento=$this->m_congreso->getUEvento();
+		$datos['ponentes']=$ponentes;
+		$datos['evento']=$evento[0];
+		$this->load->view('conferencia',$datos);
+	}
+	function taller(){
+		$instructores=$this->m_congreso->getInstructores();
+		$evento=$this->m_congreso->getUEvento();
+		$datos['instructores']=$instructores;
+		$datos['evento']=$evento[0];
+		$this->load->view('taller',$datos);
+	}
+
+//-----------------------------------------------------Tablas--------------------------------------------------------------------------------
+
 	public function showPonente()
 	{
-		$ponentes = $this->m_congreso->getPonente();
+		$ponentes = $this->m_congreso->getPonentes();
 		$this->load->view('tabla_ponentes',array("datos"=>$ponentes) );
 
 		//$info['datos']=$ponentes;
 		//$this->Load->view('Tabla_ponentes',$info);
 	}
-
+	public function showInstructor()
+	{
+		$instructores = $this->m_congreso->getInstructores();
+		$this->load->view('tabla_instructores',array("datos"=>$instructores) );
+	}
+	public function showTaller()
+	{
+		$talleres = $this->m_congreso->getTalleres();
+		$this->load->view('tabla_talleres',array("datos"=>$talleres) );
+	}
+	public function showConferencia()
+	{
+		$conferencias = $this->m_congreso->getConferencias();
+		$this->load->view('tabla_conferencias',array("datos"=>$conferencias) );
+	}
+//-----------------------------------------------Funciones para dar de alta------------------------------------------------------------------
 	public function altaEvento()
 	{
 
@@ -95,10 +126,113 @@ class Welcome extends CI_Controller {
 			$this->showPonente();
 		}
 	}
+	public function altaParticipante()
+	{
+		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
+		$this->form_validation->set_message('valid_email','El <b>%s</b> es invaildo');
+
+		$this->form_validation->set_rules('nom','Nombre','required');
+		$this->form_validation->set_rules('rfc','RFC','required');
+		$this->form_validation->set_rules('correo','E-Mail','required|valid_email');
+		// $this->form_validation->set_rules('tel','Telefono','required');
+		// $this->form_validation->set_rules('domi','Domicilio','required');
+
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('ponente');
+		}
+		else{
+
+			$datos['nombre']=$this->input->post('nom');
+			$datos['correo']=$this->input->post('correo');
+			$datos['RFC']=$this->input->post('rfc');
+			$datos['telefono']=$this->input->post('tel');
+			$datos['domicilio']=$this->input->post('domi');
+			
+			$this->m_congreso->agregarParticipante($datos);
+			//$datos['mensaje']="Alta de Ponente Exitosa";
+			//$datos['ruta']="index.php/welcome/ponente";
+			//$this->load->view('mensaje',$datos);
+			$datos['mensaje']="Alta de Participante Exitosa";
+			$datos['ruta']="index.php/welcome/participante";
+			$this->load->view('mensaje',$datos);
+		}
+	}
+	public function altaInstructor()
+	{
+		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
+		$this->form_validation->set_message('valid_email','El <b>%s</b> es invaildo');
+
+		$this->form_validation->set_rules('nom','Nombre','required');
+		$this->form_validation->set_rules('correo','E-Mail','required|valid_email');
+		// $this->form_validation->set_rules('tel','Telefono','required');
+		// $this->form_validation->set_rules('domi','Domicilio','required');
+
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('instructor');
+		}
+		else{
+
+			$datos['nombre']=$this->input->post('nom');
+			$datos['correo']=$this->input->post('correo');
+			$datos['telefono']=$this->input->post('tel');
+			
+			$this->m_congreso->agregarInstructor($datos);
+			//$datos['mensaje']="Alta de Ponente Exitosa";
+			//$datos['ruta']="index.php/welcome/ponente";
+			//$this->load->view('mensaje',$datos);
+			$this->showInstructor();
+		}
+	}
+	public function altaConferencia()
+	{
+		$datos['nombre']=$this->input->post('nom');
+		$datos['lugar']=$this->input->post('lugar');
+		$datos['ponente_idponente']=$this->input->post('ponente');
+		$datos['evento_idevento']=$this->input->post('idevento');
+		$datos['fecha']=$this->input->post('fecha');
+		$datos['hora']=$this->input->post('hora');
+		// print_r($this->input->post('evento'));
+		// print_r($this->input->post('idevento'));
+		
+		$this->m_congreso->agregarConferencia($datos);
+
+		$datos['mensaje']="Alta de Conferecia Exitosa";
+		$datos['ruta']="index.php/welcome/conferencia";
+		$this->load->view('mensaje',$datos);
+	}
+	public function altaTaller()
+	{
+		$datos['nombre']=$this->input->post('nom');
+		$datos['cupo']=$this->input->post('cupo');
+		$datos['instructor_idinstructor']=$this->input->post('instructor');
+		$datos['evento_idevento']=$this->input->post('idevento');
+		$datos['fecha']=$this->input->post('fecha');
+		$datos['hora']=$this->input->post('hora');
+		// print_r($this->input->post('evento'));
+		// print_r($this->input->post('idevento'));
+		
+		$this->m_congreso->agregarTaller($datos);
+
+		$datos['mensaje']="Alta de Taller Exitosa";
+		$datos['ruta']="index.php/welcome/taller";
+		$this->load->view('mensaje',$datos);
+	}
+
+//-------------------------------------------------------Funciones de borrado----------------------------------------------------------------
 	public function borrarPonente($id){
 		$this->m_congreso->borrarPonente($id);
 		$this->showPonente();
 	}
+	public function borrarInstructor($id){
+		$this->m_congreso->borrarInstructor($id);
+		$this->showInstructor();
+	}
+	public function borrarTaller($id){
+		$this->m_congreso->borrarTaller($id);
+		$this->showTaller();
+	}
+
+//-----------------------------------------------------Funciones de Modificacion-------------------------------------------------------------
 	public function editarPonente($id){
 		$datos_ponente = $this->m_congreso->obtenerPonente($id);
 		$datos['ponente'] = $datos_ponente[0];
@@ -127,27 +261,54 @@ class Welcome extends CI_Controller {
 			$this->showPonente();
 		}
 	}
-	function conferencia(){
-		$ponentes=$this->m_congreso->getPonente();
-		$evento=$this->m_congreso->getUEvento();
+
+	public function editarInstructor($id){
+		$datos_instructor = $this->m_congreso->obtenerInstructor($id);
+		$datos['instructor'] = $datos_instructor[0];
+		$this->load->view('editInstructor',$datos);
+	}
+	function actualizaInstructor(){
+		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
+		$this->form_validation->set_message('valid_email','El <b>%s</b> es invaildo');
+
+		$this->form_validation->set_rules('nom','Nombre','required');
+		$this->form_validation->set_rules('correo','E-Mail','required|valid_email');
+		// $this->form_validation->set_rules('tel','Telefono','required');
+		// $this->form_validation->set_rules('domi','Domicilio','required');
+
+		if($this->form_validation->run() == FALSE){
+			$this->editarInstructor($this->input->post('id'));
+		}
+		else{
+			$id=$this->input->post('id');
+			$datos['nombre']=$this->input->post('nom');
+			$datos['correo']=$this->input->post('correo');
+			$datos['telefono']=$this->input->post('tel');
+			
+			$this->m_congreso->actInstructor($datos,$id);
+			$this->showInstructor();
+		}
+	}
+
+	public function editarConferencia($id){
+		$datos_conferencia = $this->m_congreso->obtenerConferencia($id);
+		$ponentes = $this->m_congreso->getPonentes();
+		$evento = $this->m_congreso->getUEvento();
 		$datos['ponentes']=$ponentes;
 		$datos['evento']=$evento[0];
-		$this->load->view('conferencia',$datos);
+		$datos['conferencia'] = $datos_conferencia[0];
+		$this->load->view('editConferencia',$datos);
 	}
-	public function altaConferencia()
-	{
-
+	function actualizaConferencia(){
+		$id=$this->input->post('id');
 		$datos['nombre']=$this->input->post('nom');
 		$datos['lugar']=$this->input->post('lugar');
 		$datos['ponente_idponente']=$this->input->post('ponente');
 		$datos['evento_idevento']=$this->input->post('idevento');
 		$datos['fecha']=$this->input->post('fecha');
 		$datos['hora']=$this->input->post('hora');
-		
-		$this->m_congreso->agregarConferencia($datos);
-		$datos['mensaje']="Alta de conferecia Exitosa";
-		$datos['ruta']="index.php/welcome/conferencia";
-		$this->load->view('mensaje',$datos);
+		$this->m_congreso->actConferencia($datos,$id);
+		$this->showConferencia();
 	}
 }
 

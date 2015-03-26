@@ -2,7 +2,7 @@
 <?php include "/secciones/menu.php" ?>
 
 	<div class="container">
-		<h1>Alta de Conferencia</h1>
+		<h1>Evento "<?php echo $evento['nombre']?>": Alta de Conferencia</h1>
 		<form action="index.php/welcome/altaConferencia" method="post">
 			<div class="row">
 				<div class="col-md-4">
@@ -21,11 +21,12 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<span class="label label-default">Ponente:</span>
-						<select name="ponente" type="text" class="form-control">
+						<span  class="label label-default">Ponente:</span>
+						<select id="ponente" name="ponente" type="text" class="form-control">
+							<option value="" selected="selected">Selecciona un Ponente</option>
 							<?php
 								foreach ($ponentes as $key => $ponente) { ?>
-								 	<option id="<?php echo $ponente['idponente']?>">
+								 	<option value="<?php echo $ponente['idponente']?>">
 								 		<?php echo $ponente['nombre']?>
 								 	</option>
 							<?php } 
@@ -37,15 +38,15 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<span class="label label-default">Evento:</span>
-						<input name="evento" type="text" class="form-control" value="<?php echo $evento['nombre']?>">
+						<input name="evento" type="text" class="form-control" value="<?php echo $evento['nombre']?>" readonly>
 					</div>
-					<input type="hidden" name"idevento" value="<?php echo $evento['idevento']?>">
+					<input type="hidden" name="idevento" value="<?php echo $evento['idevento']?>">
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
 						<span class="label label-default">Fecha:</span>
-						<input name="fecha" type="date" class="form-control" placeholder="AAAA-MM-DD">
+						<input name="fecha" type="date" class="form-control" placeholder="AAAA-MM-DD" id="datepicker">
 					</div>
 				</div>
 
@@ -58,7 +59,7 @@
 			</div>
 
 			<div class="form-group">
-				<button type="submit" class="btn btn-default">Enviar</button>
+				<button type="button" class="pull-right btn btn-default" onclick="valida_conferencia();">Enviar</button>
 			</div>
 
 		</form>

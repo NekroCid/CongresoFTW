@@ -21,7 +21,7 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<span class="label label-default">E-Mail:</span>
-						<input name="correo" type="text" class="form-control" placeholder="usuario@gmail.com" 
+						<input id="correo" name="correo" type="text" class="form-control" placeholder="usuario@gmail.com" 
 							value="<?php echo set_value('correo') ?>"
 						>
 						<div class="error">
@@ -42,8 +42,7 @@
 						>
 					</div>
 				</div>
-				<div class="col-md-8"></div>
-			</div>
+				</div>
 			<div class="row">
 				<div class="col-md-4">
 					<div class="form-group">
@@ -65,4 +64,4 @@
 
 	</div>
 	
-<?php include "/secciones/pie.php"?>
+<?php include "/secciones/pie.php" ?>
