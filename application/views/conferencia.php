@@ -46,7 +46,7 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<span class="label label-default">Fecha:</span>
-						<input name="fecha" type="date" class="form-control" placeholder="AAAA-MM-DD" id="datepicker">
+						<input name="fecha" type="text" class="form-control" placeholder="AAAA-MM-DD" id="datepicker">
 					</div>
 				</div>
 

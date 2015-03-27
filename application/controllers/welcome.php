@@ -26,7 +26,7 @@ class Welcome extends CI_Controller {
 		$this->load->view('inicio');
 	}
 
-//----------------------------------------Vistas para Agregar--------------------------------------------------------------------------------
+//----------------------------------------Vistas para Agregar--------------------------------------------------------------------------
 
 	public function evento()
 	{
@@ -34,7 +34,9 @@ class Welcome extends CI_Controller {
 	}
 	public function participante()
 	{
-		$this->load->view('participante');
+		$talleres=$this->m_congreso->getTalleres();
+		$datos['talleres']=$talleres;
+		$this->load->view('participante',$datos);
 	}
 	public function instructor()
 	{
@@ -59,7 +61,7 @@ class Welcome extends CI_Controller {
 		$this->load->view('taller',$datos);
 	}
 
-//-----------------------------------------------------Tablas--------------------------------------------------------------------------------
+//------------------------------------------------------Tablas-------------------------------------------------------------------------
 
 	public function showPonente()
 	{
@@ -76,28 +78,54 @@ class Welcome extends CI_Controller {
 	}
 	public function showTaller()
 	{
+		$contador = 0;
 		$talleres = $this->m_congreso->getTalleres();
-		$this->load->view('tabla_talleres',array("datos"=>$talleres) );
+		foreach ($talleres as $key => $value) {
+			$instructorA = $this->m_congreso->obtenerInstructor($value['instructor_idinstructor']);
+			$instructores[$contador] = $instructorA[0]['nombre'];
+			$eventoA = $this->m_congreso->obtenerEvento($value['evento_idevento']);
+			$eventos[$contador] = $eventoA[0]['nombre'];
+			$contador=$contador+1;
+		}
+		$this->load->view('tabla_talleres',array("datos"=>$talleres,"instructor"=>$instructores,"evento"=>$eventos) );
 	}
 	public function showConferencia()
 	{
+		$contador = 0;
 		$conferencias = $this->m_congreso->getConferencias();
-		$this->load->view('tabla_conferencias',array("datos"=>$conferencias) );
+		foreach ($conferencias as $key => $value) {
+			$ponenteA = $this->m_congreso->obtenerPonente($value['ponente_idponente']);
+			$ponentes[$contador] = $ponenteA[0]['nombre'];
+			$eventoA = $this->m_congreso->obtenerEvento($value['evento_idevento']);
+			$eventos[$contador] = $eventoA[0]['nombre'];
+			$contador=$contador+1;
+		}
+		//print_r($conferencias);
+		//print_r($conferencias['eventos']);
+		
+		$this->load->view('tabla_conferencias',array("datos"=>$conferencias,"ponente"=>$ponentes,"evento"=>$eventos) );
 	}
-//-----------------------------------------------Funciones para dar de alta------------------------------------------------------------------
+//-----------------------------------------------Funciones para dar de alta------------------------------------------------------------
 	public function altaEvento()
 	{
+		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
+		$this->form_validation->set_rules('nom','Nombre','required');
 
-		$datos['nombre']=$this->input->post('nom');
-		$datos['fecha']=$this->input->post('fecha');
-		$datos['lugar']=$this->input->post('lugar');
-		$datos['hora']=$this->input->post('hora');
-		$datos['costo']=$this->input->post('costo');
-		
-		$this->m_congreso->agregarEvento($datos);
-		$datos['mensaje']="Alta de Evento Exitosa";
-		$datos['ruta']="index.php/welcome/evento";
-		$this->load->view('mensaje',$datos);
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('ponente');
+		}
+		else{
+			$datos['nombre']=$this->input->post('nom');
+			$datos['fecha']=$this->input->post('fecha');
+			$datos['lugar']=$this->input->post('lugar');
+			$datos['hora']=$this->input->post('hora');
+			$datos['costo']=$this->input->post('costo');
+			
+			$this->m_congreso->agregarEvento($datos);
+			$datos['mensaje']="Alta de Evento Exitosa";
+			$datos['ruta']="index.php/welcome/evento";
+			$this->load->view('mensaje',$datos);
+		}
 	}
 	public function altaPonente()
 	{
@@ -138,7 +166,7 @@ class Welcome extends CI_Controller {
 		// $this->form_validation->set_rules('domi','Domicilio','required');
 
 		if($this->form_validation->run() == FALSE){
-			$this->load->view('ponente');
+			$this->load->view('participante');
 		}
 		else{
 
@@ -147,16 +175,25 @@ class Welcome extends CI_Controller {
 			$datos['RFC']=$this->input->post('rfc');
 			$datos['telefono']=$this->input->post('tel');
 			$datos['domicilio']=$this->input->post('domi');
-			
+			$datos['taller_idtaller']=$this->input->post('taller');
+
+			/*$evento=$this->m_congreso->getUEvento();
+			$datos2['evento_idevento']=$evento[0]['idevento'];
+			$part=$this->m_congreso->obtenerParticipante($this->input->post('rfc'));
+			$datos2['participante_idparticipante']=$part[0]['idparticipante'];
+			print_r($datos2['evento_idevento']);
+			print_r($part);*/
 			$this->m_congreso->agregarParticipante($datos);
-			//$datos['mensaje']="Alta de Ponente Exitosa";
-			//$datos['ruta']="index.php/welcome/ponente";
-			//$this->load->view('mensaje',$datos);
+			//$this->altaRegistro($datos2);
+
 			$datos['mensaje']="Alta de Participante Exitosa";
 			$datos['ruta']="index.php/welcome/participante";
 			$this->load->view('mensaje',$datos);
 		}
 	}
+	/*function altaRegistro($datos){
+		$this->m_congreso->agregarRegistro($datos);
+	}*/
 	public function altaInstructor()
 	{
 		$this->form_validation->set_message('required','El campo <b>%s</b> es requerido');
@@ -218,7 +255,7 @@ class Welcome extends CI_Controller {
 		$this->load->view('mensaje',$datos);
 	}
 
-//-------------------------------------------------------Funciones de borrado----------------------------------------------------------------
+//-------------------------------------------------------Funciones de borrado----------------------------------------------------------
 	public function borrarPonente($id){
 		$this->m_congreso->borrarPonente($id);
 		$this->showPonente();
@@ -232,7 +269,7 @@ class Welcome extends CI_Controller {
 		$this->showTaller();
 	}
 
-//-----------------------------------------------------Funciones de Modificacion-------------------------------------------------------------
+//-----------------------------------------------------Funciones de Modificacion-------------------------------------------------------
 	public function editarPonente($id){
 		$datos_ponente = $this->m_congreso->obtenerPonente($id);
 		$datos['ponente'] = $datos_ponente[0];

@@ -23,6 +23,9 @@ class M_congreso extends CI_Model {
 	function agregarParticipante($datos){
 		$this->db->insert('participante',$datos);
 	}
+	/*function agregarRegistro($datos){
+		$this->db->insert('detalle_registro',$datos);
+	}*/
 
 //-------------------------------------------------------Funciones para obtener toda la tabla-------------------------------------------------
 
@@ -63,6 +66,11 @@ class M_congreso extends CI_Model {
 	function obtenerEvento($id){
 		$this->db->where('idevento',$id);
 		$query = $this->db->get('evento');
+		return $query->result_array();
+	}
+	function obtenerParticipante($rfc){
+		$this->db->where('RFC',$rfc);
+		$query = $this->db->get('participante');
 		return $query->result_array();
 	}
 	function getUEvento(){

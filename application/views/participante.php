@@ -64,10 +64,26 @@
 							?></textarea>
 				</div>
 			</div>
-		</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-default">Enviar</button>
+
+			<div class="col-md-4">
+				<div class="form-group">
+					<span  class="label label-default">Taller:</span>
+					<select id="taller" name="taller" type="text" class="form-control">
+						<option value="" selected="selected">Selecciona un Taller</option>
+						<?php
+							foreach ($talleres as $key => $taller) { ?>
+							 	<option value="<?php echo $taller['idtaller']?>">
+							 		<?php echo $taller['nombre']?>
+							 	</option>
+						<?php } 
+						?>
+					</select>
+				</div>
 			</div>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-default">Enviar</button>
+		</div>
 	</form>
 </div>
 	

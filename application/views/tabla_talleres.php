@@ -14,19 +14,16 @@
 			</tr>
 			<tbody>
 			<?php
+				$contador = 0;
 				if(count($datos)==0)echo "<tr class='active'><td>No hay ponentes registrados</td></tr>";
 				foreach ($datos as $key => $value) {
-					$instructorA = $this->m_congreso->obtenerInstructor($value['instructor_idinstructor']);
-					$instructor = $instructorA[0];
-					$eventoA = $this->m_congreso->obtenerEvento($value['evento_idevento']);
-					$evento = $eventoA[0];
 					echo "<tr class='active'>";
 					echo "<td>".$value['nombre']."</td>";
 					echo "<td>".$value['cupo']."</td>";
 					echo "<td>".$value['fecha']."</td>";
 					echo "<td>".$value['hora']."</td>";
-					echo "<td>".$instructor['nombre']."</td>";
-					echo "<td>".$evento['nombre']."</td>";
+					echo "<td>".$instructor[$contador]."</td>";
+					echo "<td>".$evento[$contador]."</td>";
 					echo "<td>
 						<a class='btn btn-warning btn-md' role='button' href='index.php/welcome/editarTaller/".$value['idtaller']."'>
 							<spam class='glyphicon glyphicon-pencil' aria-hiden='true'</spam>
@@ -37,6 +34,7 @@
 						</a>
 					</td>";
 					echo "</tr>";
+					$contador=$contador+1;
 				}
 			?>
 			</tbody>
