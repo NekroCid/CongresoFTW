@@ -3,7 +3,7 @@
 
 	<div class="container">
 		<table class="table .table-condensed">
-			<tr class="success">
+			<tr class="active">
 				<th>Nombre</th>
 				<th>Cupo</th>
 				<th>Fecha</th>
@@ -17,7 +17,17 @@
 				$contador = 0;
 				if(count($datos)==0)echo "<tr class='active'><td>No hay ponentes registrados</td></tr>";
 				foreach ($datos as $key => $value) {
-					echo "<tr class='active'>";
+					if($value['cupo']>0)
+					{
+						if($value['cupo']<6)
+							echo "<tr class='warning'>";
+						else
+							echo "<tr class='success'>";
+					}
+					else
+					{
+						echo "<tr class='danger'>";
+					}
 					echo "<td>".$value['nombre']."</td>";
 					echo "<td>".$value['cupo']."</td>";
 					echo "<td>".$value['fecha']."</td>";

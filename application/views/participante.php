@@ -8,7 +8,7 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<span class="label label-default">Nombre:</span>
-					<input name="nom" type="text" class="form-control" requiered placeholder="Nombre del Ponente" 
+					<input name="nom" type="text" class="form-control" requiered placeholder="Nombre del Participante" 
 						value="<?php echo set_value('nom') ?>"
 					>
 					<div class="error">
@@ -71,11 +71,12 @@
 					<select id="taller" name="taller" type="text" class="form-control">
 						<option value="" selected="selected">Selecciona un Taller</option>
 						<?php
-							foreach ($talleres as $key => $taller) { ?>
+							foreach ($talleres as $key => $taller) { 
+								if($taller['cupo']>0){?>
 							 	<option value="<?php echo $taller['idtaller']?>">
 							 		<?php echo $taller['nombre']?>
 							 	</option>
-						<?php } 
+						<?php }} 
 						?>
 					</select>
 				</div>

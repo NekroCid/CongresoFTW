@@ -2,7 +2,7 @@
 <?php include "/secciones/menu.php" ?>
 
 	<div class="container">
-		<h1>Evento "<?php echo $evento['nombre']?>": Alta de Conferencia</h1>
+		<h1>Evento "<?php echo $evento['nombre']?>": Editar de Conferencia</h1>
 		<form action="index.php/welcome/actualizaConferencia" method="post">
 			<input type="hidden" name="id" value="<?php echo $conferencia['idconferencia'] ?>">
 			<div class="row">

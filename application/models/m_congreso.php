@@ -45,7 +45,14 @@ class M_congreso extends CI_Model {
 		$query=$this->db->get('conferencia');
 		return $query->result_array();
 	}
-
+	function getParticipantes(){
+		$query=$this->db->get('participante');
+		return $query->result_array();
+	}
+	function getRegistros(){
+		$query=$this->db->get('detalle_registro');
+		return $query->result_array();
+	}
 //------------------------------------------------------Funciones para obtener un solo registro-----------------------------------------------
 
 	function obtenerPonente($id){
@@ -63,13 +70,18 @@ class M_congreso extends CI_Model {
 		$query = $this->db->get('conferencia');
 		return $query->result_array();
 	}
+	function obtenerTaller($id){
+		$this->db->where('idtaller',$id);
+		$query = $this->db->get('taller');
+		return $query->result_array();
+	}
 	function obtenerEvento($id){
 		$this->db->where('idevento',$id);
 		$query = $this->db->get('evento');
 		return $query->result_array();
 	}
-	function obtenerParticipante($rfc){
-		$this->db->where('RFC',$rfc);
+	function obtenerParticipante($id){
+		$this->db->where('idparticipante',$id);
 		$query = $this->db->get('participante');
 		return $query->result_array();
 	}
@@ -95,6 +107,10 @@ class M_congreso extends CI_Model {
 		$this->db->where('idtaller',$id);
 		$this->db->delete('taller');
 	}
+	function borrarConferencia($id){
+		$this->db->where('idconferencia',$id);
+		$this->db->delete('conferencia');
+	}
 
 //-------------------------------------------------------------Funciones de modificaciones----------------------------------------------------
 
@@ -109,5 +125,9 @@ class M_congreso extends CI_Model {
 	function actConferencia($datos,$id){
 		$this->db->where('idconferencia',$id);
 		$this->db->update('conferencia',$datos);
+	}
+	function actTaller($datos,$id){
+		$this->db->where('idtaller',$id);
+		$this->db->update('taller',$datos);
 	}
 }

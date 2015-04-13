@@ -39,7 +39,7 @@
 			?>
 			</tbody>
 		</table>
-		<p><a class="btn btn-primary" href="index.php/welcome/taller" role="button" type='submit'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Agregar Conferencia</a></p>
+		<p><a class="btn btn-primary" href="index.php/welcome/conferencia" role="button" type='submit'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Agregar Conferencia</a></p>
 	</div>
 
 <?php include "/secciones/pie.php" ?>

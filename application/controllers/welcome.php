@@ -105,6 +105,31 @@ class Welcome extends CI_Controller {
 		
 		$this->load->view('tabla_conferencias',array("datos"=>$conferencias,"ponente"=>$ponentes,"evento"=>$eventos) );
 	}
+
+	function showRegistro(){
+		$contador = 0;
+		$registros = $this->m_congreso->getRegistros();
+		foreach ($registros as $key => $value) {
+			$participanteA = $this->m_congreso->obtenerParticipante($value['participante_idparticipante']);
+			$participantes[$contador] = $participanteA[0]['nombre'];
+			$eventoA = $this->m_congreso->obtenerEvento($value['evento_idevento']);
+			$eventos[$contador] = $eventoA[0]['nombre'];
+			$contador=$contador+1;
+		}
+		//print_r($participantes);
+		$this->load->view('tabla_registro',array("registro"=>$registros, "participante"=>$participantes, "evento"=>$eventos) );
+	}
+
+	function showParticipante(){
+		$contador = 0;
+		$participantes = $this->m_congreso->getParticipantes();
+		foreach ($participantes as $key => $value) {
+			$tallerA = $this->m_congreso->obtenerTaller($value['taller_idtaller']);
+			$talleres[$contador] = $tallerA[0]['nombre'];
+			$contador=$contador+1;
+		}
+		$this->load->view('tabla_participantes',array("datos"=>$participantes, "taller"=>$talleres) );
+	}
 //-----------------------------------------------Funciones para dar de alta------------------------------------------------------------
 	public function altaEvento()
 	{
@@ -268,6 +293,10 @@ class Welcome extends CI_Controller {
 		$this->m_congreso->borrarTaller($id);
 		$this->showTaller();
 	}
+	public function borrarConferencia($id){
+		$this->m_congreso->borrarConferencia($id);
+		$this->showConferencia();
+	}
 
 //-----------------------------------------------------Funciones de Modificacion-------------------------------------------------------
 	public function editarPonente($id){
@@ -346,6 +375,27 @@ class Welcome extends CI_Controller {
 		$datos['hora']=$this->input->post('hora');
 		$this->m_congreso->actConferencia($datos,$id);
 		$this->showConferencia();
+	}
+
+	public function editarTaller($id){
+		$datos_taller = $this->m_congreso->obtenerTaller($id);
+		$instructores = $this->m_congreso->getInstructores();
+		$evento = $this->m_congreso->getUEvento();
+		$datos['instructores']=$instructores;
+		$datos['evento']=$evento[0];
+		$datos['taller'] = $datos_taller[0];
+		$this->load->view('editTaller',$datos);
+	}
+	function actualizaTaller(){
+		$id=$this->input->post('id');
+		$datos['nombre']=$this->input->post('nom');
+		$datos['cupo']=$this->input->post('cupo');
+		$datos['instructor_idinstructor']=$this->input->post('instructor');
+		$datos['evento_idevento']=$this->input->post('idevento');
+		$datos['fecha']=$this->input->post('fecha');
+		$datos['hora']=$this->input->post('hora');
+		$this->m_congreso->actTaller($datos,$id);
+		$this->showTaller();
 	}
 }
 
